@@ -30,4 +30,4 @@ RUN apt-get purge -y \
 COPY . /app/src/
 RUN poetry install
 
-CMD ["/usr/local/bin/python", "-m", "{{cookiecutter.project_name}}"]
+CMD ["/usr/local/bin/python", "{{cookiecutter.project_name}}/main.py"]

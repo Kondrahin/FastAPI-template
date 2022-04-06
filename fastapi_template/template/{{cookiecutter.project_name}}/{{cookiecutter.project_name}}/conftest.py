@@ -30,6 +30,8 @@ from {{cookiecutter.project_name}}.db.utils import create_database, drop_databas
 {%- endif %}
 
 import nest_asyncio
+import httpx
+from asgi_lifespan import LifespanManager
 
 nest_asyncio.apply()
 
@@ -222,3 +224,13 @@ def client(
     :return: client for the app.
     """
     return TestClient(app=fastapi_app)
+
+
+@pytest.fixture(autouse=True)
+async def http_client(fastapi_app: FastAPI) -> httpx.AsyncClient:
+    async with LifespanManager(fastapi_app):
+        async with httpx.AsyncClient(
+            base_url="http://testserver",
+            app=fastapi_app,
+        ) as fastapi_app_client:
+            yield fastapi_app_client

@@ -24,6 +24,13 @@ repos:
               - --preserve-quotes
               - --indent=2
 
+    - repo: https://github.com/PyCQA/flake8
+      rev: 4.0.1
+      hooks:
+        - id: flake8
+          args: [ '--config=setup.cfg' ]
+          additional_dependencies: [ flake8-isort ]
+
     - repo: local
       hooks:
           - id: black
@@ -41,17 +48,9 @@ repos:
 
           - id: isort
             name: isort
-            entry: poetry run isort
+            entry: poetry run isort --recursive
             language: system
             types: [python]
-
-          - id: flake8
-            name: Check with Flake8
-            entry: poetry run flake8
-            language: system
-            pass_filenames: false
-            types: [python]
-            args: [--count, .]
 
           - id: mypy
             name: Validate types with MyPy
@@ -59,8 +58,7 @@ repos:
             language: system
             types: [python]
             pass_filenames: false
-            args:
-              - "{{cookiecutter.project_name}}"
+            args: ["{{cookiecutter.project_name}}", "--config=setup.cfg"]
 
           - id: yesqa
             name: Remove usless noqa
